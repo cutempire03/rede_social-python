@@ -6,7 +6,6 @@ def configure_db(app: FastAPI):
         app=app,
         # db_url='postgres://postgres:qwerty123@localhost:5432/events'
         # db_url='sqlite://db.sqlite3',
-        modules={"models": ["src.datalayer.models.user"]},
 
         config={
             'connections': {

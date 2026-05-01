@@ -1,8 +1,7 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from typing import Annotated
-from src.datalayer.models.user import UserModel
 from src.api.dtos.posts import PostCreation
-from src.authenticaion import verify_token
+from src.api.authentication import login_required
 from src.services.post import PostService
 
 router = APIRouter(
@@ -12,14 +11,15 @@ router = APIRouter(
 )
 
 @router.post("/create")
+@login_required
 async def create_post(
     body: PostCreation,
-    current_user: Annotated[UserModel, Depends(verify_token)],
-    service: Annotated[PostService, Depends(PostService)]
+    service: Annotated[PostService, Depends(PostService)],
+    request: Request.request
 ):
 
     response = await service.create_post(
-        user=current_user,
+        user=request.current_user,
         message=body.message
     )
 
